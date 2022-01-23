@@ -20,7 +20,131 @@
 </head>
 
 <body>
+    <header>
+        <!-- <span id="navbar-collapse">➪</span>
+        <span id="navbar-collapse">◎</span>
+        <span id="navbar-collapse">❖</span> -->
 
+        <section id="navbar-collapse">
+            <span>⥱</span>
+        </section>
+        <div class='logo'>
+            <img src="/images/header.png" alt="" />
+            <h4>Sorting Algorithm Visualization</h4>
+        </div>
+        <nav>
+            <!-- Main Navigation inside <header> -->
+        </nav>
+    </header>
+
+    <aside>
+        <section id="sidetitle">
+            <p>ALGORITHMS</p>
+            <dl>
+                <dt>LOGARITHMIC TIME</dd>
+                    <!-- ~O(nLog(n))</dt> -->
+                <dd>Quick Sort</dd>
+                <dd>Merge Sort</dd>
+                <dd>Heap Sort</dd>
+
+                <dt>QUADRATIC TIME</dd>
+                    <!-- ~O(n<sup>2</sup>)</dt> -->
+                <dd>Bubble Sort</dd>
+                <dd>Selection Sort</dd>
+                <dd>Insertion Sort</dd>
+            </dl>
+        </section>
+        <section id="sideinfo">
+        </section>
+    </aside>
+
+    <main>
+        <section id="controls">
+            <!-- <button class="move_up">Move Up</button>
+            <button class="move_down">Move Down</button>
+            <button class="left">Left</button>
+            <button class="right">Right</button> -->
+            <section class="controls__generate">
+                <ul class="controls__generate__options">
+                    <li>Random</li>
+                    <li>Sorted Ascending</li>
+                    <li>Sorted Descending</li>
+                </ul>
+                <button>Generate</button>
+            </section>
+            <button class="controls__sort" disabled>Sort</button>
+            <div class="controls__range">
+                <section class="controls__range__count">
+                    <label for="count">Total</label>
+                    <input type="number" min="5" max="100" value="10" id="count" required />
+                </section>
+                <section class="controls__range__sortspeed">
+                    <input type="range" min="0.01" max="100.01" value="50" id="speed">
+                    <label for="speed"> Normal</label>
+                </section>
+            </div>
+        </section>
+        <section id="compare">
+            <span>⥃</span>
+        </section>
+        <div class="sortbox">
+            <span class="sortbox__timer">00:00:000</span>
+            <div class="sortbox__select">
+                <label for="sortType">Select algorithm </label>
+                <div class="sortbox__select__dropdown">
+                    <input type="text" value="Quick Sort" id="sortType" readonly>
+                    <section id="drop">
+                        <span>⇩</span>
+                    </section>
+                    <ul>
+                        <li>Quick Sort</li>
+                        <li>Merge Sort</li>
+                        <li>Heap Sort</li>
+                        <li>Bubble Sort</li>
+                        <li>Selection Sort</li>
+                        <li>Insertion Sort</li>
+                    </ul>
+                </div>
+            </div>
+            <ul class="sortbox__container">
+            </ul>
+            <div class="algorithm">
+                <section class="algorithm__title">
+                    <span>Algorithm<span>
+                </section>
+                <span class="algorithm__tracker"></span>
+                <div class="algorithm__steps"></div>
+            </div>
+        </div>
+    </main>
+
+
+    <footer>
+        <div class="contact">
+            <section>
+                <img alt="My Github" src="images/svg/github-brands.svg" width="20" height="20">
+                <a href="https://github.com/evanigwilo" target="_blank"> Github</a>
+            </section>
+            <section>
+                <img alt="My Linkedin" src="images/svg/linkedin-brands.svg" width="20" height="20">
+                <a href="https://www.linkedin.com/in/evanigwilo" target="_blank"> Linkedin</a>
+            </section>
+        </div>
+        <div class="copyright">
+            <pre>© Copyright <span id="copyright_date"></span> Developed by <u>Evan Igwilo</u></pre>
+        </div>
+        <div class="reference">
+            <p>Reference</p>
+            <section>
+                <img alt="Wikipedia"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/300px-Wikipedia-logo-v2.svg.png"
+                    width="20" height="20">
+                <a href="https://en.wikipedia.org/wiki/Sorting_algorithm" target="_blank"> Wikipedia</a>
+            </section>
+        </div>
+    </footer>
+
+    <script src='/scrtpts/index.js'></script>
 </body>
 
 </html>
