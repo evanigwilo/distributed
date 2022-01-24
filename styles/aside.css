@@ -1,0 +1,80 @@
+aside {
+  grid-area: aside;
+  grid-row: 2 / 12;
+  font-size: 0.85em;
+  display: flex;
+}
+aside > * {
+  border: var(--_border);
+}
+aside section {
+  flex-shrink: 0;
+}
+aside #sidetitle p {
+  padding: 10px;
+  font-weight: 500;
+}
+aside dl * {
+  padding: 15px 10px;
+  white-space: nowrap;
+}
+
+aside dl dd {
+  margin-left: 20px;
+  cursor: pointer;
+  color: black;
+}
+aside .sort-selection {
+  color: rgb(var(--mainColor));
+  font-weight: 550;
+  text-shadow: 1px 1px 0px darkgrey;
+}
+aside dl dt {
+  background-color: rgb(var(--mainColor));
+  color: white;
+  border-bottom: var(--_border);
+  border-top: var(--_border);
+}
+aside dl dd:active {
+  text-shadow: none;
+  transition-duration: 0.01s;
+  transform: translateX(10px);
+}
+aside dl > dd {
+  transition-property: padding, transform;
+  transition-timing-function: ease-out;
+  transition-duration: 0.2s;
+  width: 90%;
+  border-radius: 25px;
+  /* background-color:lightgreen; */
+  /* border-bottom-left-radius: 70px;
+    border-top-right-radius: 70px; */
+}
+
+aside #sidetitle {
+  width: var(--aside_sidetitle_width);
+  overflow: hidden;
+  transition: width 0.2s;
+  background-color: white;
+}
+aside #sideinfo {
+  font-size: 0.85em;
+  padding: min(var(--aside_expandwidth), 5px);
+  background-color: white;
+  overflow-y: scroll;
+  width: var(--aside_expandwidth);
+  transition: width 0.1s;
+}
+aside #sideinfo table {
+  border-collapse: separate;
+  width: 100%;
+  border-radius: 5px;
+  box-shadow: var(--_boxshadow);
+  margin-bottom: 5px;
+}
+aside #sideinfo table td {
+  padding: 3px;
+}
+aside #sideinfo table tr:nth-child(even) {
+  background-color: rgb(211 211 211 / 60%);
+}
