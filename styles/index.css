@@ -1,2 +1,23 @@
 @import url("http://fonts.cdnfonts.com/css/proxima-nova-2");
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500&display=swap");
+
+@import url("header.css");
+@import url("aside.css");
+
+:root {
+  --mainColor: 0, 150, 120;
+  --sortbox_padding: 3px;
+  --sortbox__select_height: 30px;
+  --main_sortbox_width: 100%;
+  --main_sortbox_notlastchild_margin: 5px;
+  --main_algorithm_padding: 15px;
+  --main_algorithm_height: 1.5em;
+  --main_algorithm_padding: 10px;
+  --_boxshadow: 1px 1px 2px lightgrey;
+  --_border: 1px solid lightgrey;
+  --sortbox__select__dropdown_ul_li_height: 1.6em;
+  --sortbox__select__dropdown_input_width: 140px;
+  /* --aside_sidetitle_width: 160px; */
+  --aside_expandwidth: 0px;
+  /* --main_controls_padding : 30px; */
+}
