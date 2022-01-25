@@ -1,0 +1,241 @@
+main {
+  grid-area: main;
+  grid-row: 2 / 12;
+  grid-column-start: 2;
+  box-shadow: var(--_boxshadow);
+  position: relative;
+  display: flex;
+  font-size: 0.85em;
+  padding: var(--sortbox_padding) !important;
+}
+main #compare {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: absolute;
+  font-size: 1.2em;
+  height: var(--sortbox__select_height);
+  width: var(--sortbox__select_height);
+  top: calc(2 * var(--sortbox_padding));
+  /* 5px + -> border-radus: 5px from .sortbox__container */
+  right: calc(5px + var(--sortbox_padding));
+  border-radius: 50%;
+  background: white;
+  box-shadow: 1px 1px 2px grey;
+  z-index: 2;
+}
+main .compare--move {
+  left: calc(50% - var(--sortbox__select_height) / 2) !important;
+}
+main #compare::after {
+  content: "Compare";
+  position: absolute;
+  top: 110%;
+  padding: 3px;
+  border-radius: 5px;
+  background-color: inherit;
+  box-shadow: inherit;
+  font-size: 0.7em;
+  transform: scaleX(0);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+main > #compare:active {
+  box-shadow: inset 1px 1px 2px grey;
+  transform: scale(0.9);
+  transition: transform 0.05s;
+}
+
+main .sortbox {
+  position: relative;
+  height: 100%;
+  width: var(--main_sortbox_width);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sortbox_padding);
+}
+main .sortbox__container {
+  flex: 70%;
+  display: flex;
+  flex-flow: wrap-reverse;
+  position: relative;
+  border-radius: 5px;
+  background-color: rgba(var(--mainColor), 0.1);
+  /* box-shadow: 2px 2px 1px darkgrey; */
+  box-shadow: 1px 1px 2px 0px darkgrey;
+  overflow: hidden;
+  margin-top: var(--sortbox_padding);
+
+  --leftvelocity: 0;
+  --rightvelocity: 0;
+  --upvelocity: 0;
+  --downvelocity: 0;
+
+  --transproperty: "";
+  --transbackgroundcolor: "";
+  --transheight: "";
+  --transopacity: "";
+}
+main .sortbox__container li {
+  position: absolute;
+  list-style: none;
+  border: 1px solid gray;
+  background: lightgrey;
+  /* box-shadow: 1px 1px 2px black; */
+  border: 1px solid black;
+  display: flex;
+  text-align: center;
+  flex-direction: column-reverse;
+  border-radius: 0.2em 0.2em 0 0;
+  /* will-change: transform; */
+  /* transition: color transform 1s; */
+}
+main .sortbox__container li > p {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+main .sortbox__container--transform {
+  transform: scale(0.8) rotateZ(-90deg);
+}
+main .sortbox > *:not(.sortbox__timer) {
+  width: 100%;
+}
+main .sortbox > *:not(:last-child) {
+  margin-bottom: var(--main_sortbox_notlastchild_margin);
+}
+main .sortbox__timer {
+  position: absolute;
+  padding: 3px;
+  border-radius: 8px;
+  margin-left: 1em;
+  color: white;
+  background-color: rgb(var(--mainColor));
+  margin-top: calc(1.5em + var(--sortbox__select_height));
+  text-shadow: 1px 1px 1px darkslategrey;
+  box-shadow: 1px 1px 1px rgba(var(--mainColor), 0.5);
+  z-index: 2;
+  opacity: 0;
+
+  --sortbox__time_display: none;
+}
+main .sortbox__timer::after {
+  content: "✓";
+  position: absolute;
+  padding: 0px 3px;
+  font-size: 1.2em;
+  font-weight: bold;
+  display: var(--sortbox__time_display);
+}
+main .sortbox__timer--show {
+  opacity: 1 !important;
+}
+main .sortbox__select {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--sortbox__select_height);
+  padding: 0px calc(var(--sortbox__select_height));
+}
+main .sortbox__select label {
+  padding: 5px;
+}
+main .sortbox__select__dropdown {
+  position: relative;
+}
+main .sortbox__select__dropdown #drop span {
+  user-select: none !important;
+}
+main .sortbox__select__dropdown #drop {
+  display: grid;
+  place-items: center;
+  position: absolute;
+  cursor: pointer;
+  padding: 5px;
+  top: 0;
+  height: 100%;
+  right: 3px;
+  transition-property: transform, scale;
+  transition-duration: 0.2s;
+}
+main .sortbox__select__dropdown #drop:active {
+  transform: scale(0.8);
+}
+main .sortbox__select__dropdown--rotate {
+  transform: rotate(3.142rad);
+}
+main .sortbox__select__dropdown--expand {
+  height: calc(var(--sortbox__select__dropdown_ul_li_height) * 6) !important;
+}
+main .sortbox__select__dropdown input {
+  outline-style: none;
+  border: 1px solid grey;
+  width: var(--sortbox__select__dropdown_input_width);
+  border-radius: 15px;
+  padding: 5px;
+  font-size: inherit;
+}
+main .sortbox__select__dropdown ul {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: var(--_boxshadow);
+  width: calc(var(--sortbox__select__dropdown_input_width) - 10px * 2);
+  left: 10px;
+  height: 0px;
+  background-color: white;
+  z-index: 2;
+  transition: height 0.2s ease;
+}
+main .sortbox__select__dropdown ul::window-inactive {
+  height: 0px;
+}
+main .sortbox__select__dropdown ul li {
+  padding: 0px 10px;
+  height: var(--sortbox__select__dropdown_ul_li_height);
+  list-style-type: none;
+  cursor: pointer;
+  transition: color 0.05s;
+}
+main .sortbox__select__dropdown ul li:hover {
+  background-color: rgb(var(--mainColor));
+  color: white;
+}
+
+main .algorithm {
+  flex: 30%;
+  position: relative;
+  padding: var(--main_algorithm_padding);
+  box-shadow: var(--_boxshadow);
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  overflow: scroll;
+  scroll-behavior: smooth;
+}
+main .algorithm section,
+.algorithm > *:not(.algorithm__steps) {
+  /* width: 100%; */
+  height: var(--main_algorithm_height);
+  border-bottom: 2px solid lightgrey;
+  /* padding-top: calc(var(--main_algorithm_height) / 2 - 1em / 2 - 2px - 3px); */
+}
+main .algorithm__title {
+  padding-left: calc(10px + var(--main_algorithm_padding));
+}
+main .algorithm__tracker {
+  position: absolute;
+  width: calc(100% - var(--main_algorithm_padding) * 2);
+  background-color: rgba(var(--mainColor), 0.5);
+  transition: top 0.2s ease-in;
+  top: calc(var(--main_algorithm_padding) + var(--main_algorithm_height) * 1);
+}
+main .algorithm__steps {
+  padding-left: var(--main_algorithm_padding);
+}
+main .algorithm__steps section {
+  display: flex;
+  align-items: center;
+}
+main .algorithm__steps section p {
+  white-space: nowrap;
+  transition: transform 0.2s, font-weight 0.2s;
+}
