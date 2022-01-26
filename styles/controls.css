@@ -1,0 +1,98 @@
+main {
+  padding-bottom: var(--main_controls_padding) !important;
+}
+
+#controls {
+  --sliderwidth: 50%;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding-top: 3px;
+  position: absolute;
+  bottom: var(--sortbox_padding);
+  width: calc(100% - var(--sortbox_padding) * 2);
+  height: var(--main_controls_padding);
+  /* background-color: red !important; */
+}
+#controls * {
+  margin-right: 3px;
+}
+#controls .controls__range {
+  display: flex;
+  align-items: center;
+}
+#controls .controls__range__sortspeed {
+  width: 160px;
+}
+#controls .controls__generate__options {
+  position: absolute;
+  bottom: calc(var(--main_controls_padding) - 3px);
+  box-shadow: var(--_boxshadow);
+  list-style-position: inside !important;
+  list-style: circle;
+  background-color: white;
+  border: var(--_border);
+  border-radius: 5px;
+  transform: perspective(5cm) rotateY(90deg);
+  transform-origin: left;
+  transition: transform 0.2s ease-in-out;
+  z-index: 2;
+  overflow: hidden;
+}
+#controls .controls__generate__options--transform {
+  transform: perspective(5cm) rotateY(10deg);
+}
+#controls .controls__generate__options li {
+  padding: 3px 4px;
+  cursor: pointer;
+  transform: scale(1);
+  transition-property: transform, font-weight, color, background-color;
+  transition-duration: 0.1s;
+}
+#controls .controls__generate__options li:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  font-weight: 500;
+  transform: scale(1.05);
+}
+
+#controls button,
+#controls input[type="number"] {
+  outline: none;
+  border: 1px solid gray;
+  transition: transform 0.2s;
+  width: 55px;
+}
+#controls button {
+  cursor: pointer;
+  color: black;
+  padding: 2px;
+  width: 5em;
+  border-radius: 3px;
+  background-color: white;
+}
+#controls button:active,
+#controls input[type="number"]:active {
+  transform: scale(0.97);
+  font-weight: 350;
+}
+#controls input[type="number"] {
+  padding: 3px 2px 2px 5px;
+  border-radius: 15px;
+  box-shadow: inset -0px 1px 2px 0px lightgrey;
+  overflow: hidden;
+}
+
+/* Chrome, Safari, Edge, Opera */
+#controls input[type="number"]::-webkit-outer-spin-button,
+#controls input[type="number"]::-webkit-inner-spin-button {
+  /* -webkit-appearance: none; */
+   margin: -3px -1px;
+  cursor: pointer; 
+}
+
+/* Firefox */
+#controls input[type="number"] {
+  /* -moz-appearance: textfield; */
+}
