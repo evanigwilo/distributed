@@ -1,0 +1,45 @@
+.controls__range__sortspeed label {
+  text-transform: capitalize;
+}
+.controls__range__sortspeed input,
+.controls__range__sortspeed input::before {
+  height: 7px;
+  border-radius: 15px;
+  opacity: 0.8;
+  outline: none;
+}
+.controls__range__sortspeed input {
+  width: 100px;
+  position: relative;
+  -webkit-appearance: none;
+  background: lightgrey;
+  outline-color: rgb(var(--mainColor));
+  cursor: pointer;
+}
+
+.controls__range__sortspeed input:hover {
+  transition: opacity 0.2s;
+  opacity: 1;
+}
+.controls__range__sortspeed input::before {
+  position: absolute;
+  content: "";
+  background: rgb(var(--mainColor));
+  width: var(--sliderwidth);
+}
+.controls__range__sortspeed input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgb(var(--mainColor));
+}
+
+/* .controls__range__sortspeed input::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: rgb(var(--mainColor));
+  cursor: pointer;
+} 
+*/
