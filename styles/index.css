@@ -9,6 +9,7 @@
 @import url("slider.css");
 @import url("animations.css");
 
+
 :root {
   --mainColor: 0, 150, 120;
   --sortbox_padding: 3px;
@@ -25,4 +26,74 @@
   /* --aside_sidetitle_width: 160px; */
   --aside_expandwidth: 0px;
   /* --main_controls_padding : 30px; */
+}
+*:not(dd) {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  font-family: inherit;
+}
+
+body {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: min-content;
+  grid-template-rows: repeat(12, 1fr);
+  grid-template-areas:
+    "header header header"
+    "aside main main"
+    "footer footer footer";
+  place-items: center;
+  font-family: "Roboto Slab", "Proxima Nova", sans-serif;
+  /* font-display: swap; */
+  overflow: hidden;
+  transition: 2s;
+}
+body > * {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.blur-filter {
+  filter: blur(1px);
+}
+.opacity-half {
+  opacity: 0.5;
+}
+
+.movedown {
+  transform: perspective(5cm) rotateY(0deg) translateY(-100px);
+  animation: movedown 0.5s ease-in forwards;
+}
+.moveup {
+  animation: moveup 1s ease forwards;
+}
+.moveleft {
+  transform: perspective(5cm) translateX(var(--leftvelocity));
+}
+.moveright {
+  transform: perspective(5cm) translateX(var(--rightvelocity)) rotateZ(30deg);
+}
+.transition,
+.moveleft,
+.moveright,
+.resetrotate {
+  transition: var(--transproperty);
+}
+.moveright,
+.resetrotate {
+  transform-origin: bottom right;
+}
+.resetrotate {
+  transform: perspective(5cm) translateX(var(--rightvelocity)) rotateZ(0deg);
+}
+.transbackgroundcolor {
+  background-color: var(--transbackgroundcolor) !important;
+}
+.transopacity {
+  opacity: var(--transopacity) !important;
 }
