@@ -1,0 +1,54 @@
+@keyframes moveup {
+  0% {
+  }
+  25% {
+    transform: perspective(5cm) rotateY(-60deg);
+    filter: blur(1px);
+  }
+  65% {
+    transform: perspective(5cm) rotateY(-60deg) translateY(var(--upvelocity));
+    filter: blur(1px);
+  }
+  100% {
+    transform: perspective(5cm) rotateY(0deg) translateY(var(--upvelocity));
+  }
+}
+@keyframes movedown {
+  25% {
+    filter: blur(1px);
+  }
+  100% {
+    transform: perspective(5cm) translateY(var(--downvelocity));
+  }
+}
+@keyframes moveleft {
+  100% {
+    transform: perspective(5cm) translateX(var(--leftvelocity));
+  }
+}
+@keyframes moveright {
+  0% {
+  }
+  25% {
+    transform-origin: bottom right;
+    transform: perspective(5cm) translateX(calc(var(--rightvelocity) / 4))
+      rotateZ(5deg);
+  }
+  60% {
+    transform-origin: bottom right;
+    transform: perspective(5cm) translateX(calc(var(--rightvelocity) / 2))
+      rotateZ(30deg);
+  }
+  100% {
+    transform-origin: bottom right;
+    transform: perspective(5cm) translateX(var(--rightvelocity)) rotateZ(0deg);
+  }
+}
+@keyframes transheight {
+  25% {
+    filter: blur(1px);
+  }
+  100% {
+    height: var(--transheight);
+  }
+}
