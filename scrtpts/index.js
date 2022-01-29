@@ -43,3 +43,45 @@ window.addEventListener('DOMContentLoaded', function (e) {
     console.log("DOMContentLoaded");
     document.querySelector("#copyright_date").textContent = (new Date()).getUTCFullYear() + '.';
 });
+
+function inputDropDownEvents(input) {
+    const dropIcon = input.nextElementSibling;
+    const dropList = dropIcon.nextElementSibling;
+    dropList.childNodes.forEach(element => {
+        element.addEventListener('click', () => {
+            input.value = element.textContent;
+            input.parentElement.click();
+        });
+    });
+    input.parentElement.addEventListener('click', (e) => {
+        if (e.srcElement.nodeName === 'LI') return;
+        dropList.classList.toggle('sortbox__select__dropdown--expand');
+        dropIcon.classList.toggle('sortbox__select__dropdown--rotate');
+    });
+}
+sortBoxes.push(mainsortBox);
+sortBoxesContainer.push(mainsortBox.getElementsByClassName('sortbox__container')[0]);
+sortBoxesNodes.push([]);
+sortBoxesNumbers.push([]);
+const sortInput = mainsortBox.getElementsByTagName('Input')[0];
+inputDropDownEvents(sortInput);
+const sortTimer = mainsortBox.getElementsByClassName('sortbox__timer')[0];
+sortBoxesConstants.push({
+    sortInput: sortInput,
+    copyTemp: null,
+    elemTemp: null,
+    maxNum: 0,
+    animationPlaying: false,
+});
+sortBoxesAlgoBoard.push({
+    algoBoard: document.querySelector('.algorithm'),
+    algoTitle: document.querySelector('.algorithm__title'),
+    algoSteps: document.querySelector('.algorithm__steps'),
+    algoTracker: document.querySelector('.algorithm__tracker'),
+    moveToLineConstants: {
+        prev: null,
+        fontWeight: null,
+        transform: null,
+        topOnce: false,
+    }
+});

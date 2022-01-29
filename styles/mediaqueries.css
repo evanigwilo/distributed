@@ -1,0 +1,80 @@
+
+/* Extra small devices (phones, 599px and down) */
+@media only screen and (max-width: 599px) {
+  :root {
+    --mediasize: extraSmall;
+    --main_controls_padding: 30px;
+  }
+  body {
+    font-size: 14px;
+  }
+  main #compare {
+    display: none;
+  }
+}
+@media only screen and (max-width: 560px) {
+  :root {
+    --aside_sidetitle_width: 0px;
+  }
+  header #navbar-collapse {
+    display: grid;
+  }
+  main {
+    grid-column-start: 1;
+  }
+  aside #sidetitle,
+  #sideinfo {
+    z-index: 3;
+  }
+  aside #sideinfo {
+    position: fixed;
+    /* grid-template-rows is 12, so subtract the header and footer height */
+    height: calc(100% - 2 * (100% / 12));
+  }
+  main .algorithm {
+    display: none;
+  }
+}
+/* Small devices (portrait tablets and large phones, 410px and down) */
+@media only screen and (max-width: 410px) {
+  :root {
+    --main_controls_padding: 60px;
+    --main_sortbox_width: 100% !important;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  :root {
+    --mediasize: small;
+    --main_controls_padding: 30px;
+    --aside_sidetitle_width: 160px !important;
+  }
+  body {
+    font-size: 15px;
+  }
+  main #compare {
+    display: grid;
+  }
+}
+/* Medium devices (landscape tablets, 750px and up) */
+@media only screen and (min-width: 750px) {
+  :root {
+    --mediasize: medium;
+  }
+  body {
+    font-size: 16px;
+  }
+}
+/* Large devices (laptops/desktops, 915px and up) */
+@media only screen and (min-width: 915px) {
+  :root {
+    --mediasize: large;
+  }
+}
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  :root {
+    --mediasize: extraLarge;
+  }
+}
