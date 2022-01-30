@@ -1,0 +1,170 @@
+const root = document.querySelector(':root');
+const navButton = document.querySelector("#navbar-collapse");
+const generateStopButton = document.querySelector(".controls__generate button");
+const sortButton = document.querySelector(".controls__sort");
+const slider = document.querySelector(".controls__range__sortspeed input");
+const input = document.querySelector('#count');
+const controls = document.querySelector('main #controls');
+const aside = document.querySelector('aside');
+const asideSideinfo = document.querySelector('aside #sideinfo');
+const generateOptions = document.querySelector('.controls__generate__options');
+const sidebarTitle = document.querySelectorAll('aside dl dd');
+const main = document.querySelector('main');
+const mainCompare = document.querySelector('main #compare');
+const mainsortBox = document.querySelector('main > .sortbox');
+const algoTrackerDefaultTop = 'calc(var(--main_algorithm_padding) + var(--main_algorithm_height) * ';
+
+const checkFrequency = 30;
+const constDelay = 0.05;
+
+const sortBoxes = [];
+const sortBoxesContainer = [];
+const sortBoxesNodes = [];
+const sortBoxesNumbers = [];
+const sortBoxesConstants = [];
+const sortBoxesAlgoBoard = [];
+
+const buttonState = {
+    generateBox: 'Generate',
+    stopSorting: 'Stop'
+};
+const sortState = {
+    sortSelection: null,
+    terminated: false,
+    terminateMsg: 'Sort Terminated',
+    sliderValue: -1,
+    firstTimerStop: false,
+    get canHover() {
+        return !window.matchMedia("(hover: none)").matches;
+    }
+};
+
+window.addEventListener('DOMContentLoaded', function (e) {
+    console.log("DOMContentLoaded");
+    document.querySelector("#copyright_date").textContent = (new Date()).getUTCFullYear() + '.';
+});
+
+function inputDropDownEvents(input) {
+    const dropIcon = input.nextElementSibling;
+    const dropList = dropIcon.nextElementSibling;
+    dropList.childNodes.forEach(element => {
+        element.addEventListener('click', () => {
+            input.value = element.textContent;
+            input.parentElement.click();
+        });
+    });
+    input.parentElement.addEventListener('click', (e) => {
+        if (e.srcElement.nodeName === 'LI') return;
+        dropList.classList.toggle('sortbox__select__dropdown--expand');
+        dropIcon.classList.toggle('sortbox__select__dropdown--rotate');
+    });
+}
+
+async function generateBoxNodes(index, method) {
+    const constants = sortBoxesConstants[index];
+    const container = sortBoxesContainer[index];
+
+    // Print Algorithm Steps
+    /**/
+
+    constants.horiMul = 1;
+    constants.verTop = Math.floor(container.clientHeight / 2) - 1;
+    constants.boxWidth = Math.floor(container.clientWidth / Number(input.value));
+    constants.totalBox = Math.floor(container.clientWidth / constants.boxWidth);
+    container.style.setProperty('--rightvelocity', constants.boxWidth * constants.horiMul + 'px');
+    container.style.setProperty('--leftvelocity', + constants.boxWidth * constants.horiMul * -1 + 'px');
+    container.style.setProperty('--upvelocity', constants.verTop * -1 + 'px');
+    container.style.setProperty('--downvelocity', constants.verTop + 'px');
+
+
+    constants.maxNum = sortBoxesNodes[index].length = sortBoxesNumbers[index].length = 0;
+    // console.log({ sortBoxesNodes: sortBoxesNodes[index].length, sortBoxesNodes1: sortBoxesNodes[index] })
+    container.textContent = '';
+
+    if (index > 0) {
+        sortBoxesNumbers[0].forEach(value => {
+            sortBoxesNumbers[index].push(value);
+            constants.maxNum = Math.max(constants.maxNum, value);
+        });
+    } else {
+        if (method == 'Random') {
+            Array.from({ length: constants.totalBox }, (_, i) => i + 1)
+                .map(a => ({ value: a, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .forEach(value => {
+                    sortBoxesNumbers[index].push(value.value);
+                    constants.maxNum = Math.max(constants.maxNum, value.value);
+                });
+        } else if (method == 'Sorted Ascending') {
+            constants.maxNum = constants.totalBox;
+            for (let i = 1; i <= constants.totalBox; i++) {
+                sortBoxesNumbers[index].push(i);
+            }
+        } else if (method == 'Sorted Descending') {
+            constants.maxNum = constants.totalBox;
+            for (let i = constants.totalBox; i >= 1; i--) {
+                sortBoxesNumbers[index].push(i);
+            }
+        }
+    }
+    
+    constants.copyTemp = Array(constants.totalBox).fill();
+    constants.elemTemp = Array(constants.totalBox).fill();
+
+    for (let i = 0; i < constants.totalBox; i++) {
+        const value = sortBoxesNumbers[index][i];
+        const newLi = document.createElement("li");
+        const newContent = document.createElement("p");
+        if (constants.boxWidth >= 20) {
+            newContent.textContent = value;
+        }
+        if (constants.boxWidth < 40) {
+            newContent.classList.add('sortbox__container--transform');
+        }
+        newLi.appendChild(newContent);
+        newLi.style.height = 35 + (value * constants.verTop / constants.maxNum) + 'px';
+        newLi.style.width = constants.boxWidth + 'px';
+        newLi.style.left = i * constants.boxWidth + 'px';
+        newLi.style.zIndex = 0;
+        newLi.style.paddingBottom = '10px';
+        newLi.classList.add('transition');
+
+        newLi.addEventListener('animationstart', (e) => animationStart(e, newLi));
+        newLi.addEventListener('animationend', (e) => animationEnd(e, newLi));
+        newLi.addEventListener('transitionend', (e) => transitionEnd(e, newLi));
+
+        container.appendChild(newLi);
+
+        sortBoxesNodes[index].push(newLi);
+
+        makeTransition(newLi, index, 'opacity', 0);
+
+        //await new Promise(r => setTimeout(r, constDelay));
+    }
+}
+sortBoxes.push(mainsortBox);
+sortBoxesContainer.push(mainsortBox.getElementsByClassName('sortbox__container')[0]);
+sortBoxesNodes.push([]);
+sortBoxesNumbers.push([]);
+const sortInput = mainsortBox.getElementsByTagName('Input')[0];
+inputDropDownEvents(sortInput);
+const sortTimer = mainsortBox.getElementsByClassName('sortbox__timer')[0];
+sortBoxesConstants.push({
+    sortInput: sortInput,
+    copyTemp: null,
+    elemTemp: null,
+    maxNum: 0,
+    animationPlaying: false,
+});
+sortBoxesAlgoBoard.push({
+    algoBoard: document.querySelector('.algorithm'),
+    algoTitle: document.querySelector('.algorithm__title'),
+    algoSteps: document.querySelector('.algorithm__steps'),
+    algoTracker: document.querySelector('.algorithm__tracker'),
+    moveToLineConstants: {
+        prev: null,
+        fontWeight: null,
+        transform: null,
+        topOnce: false,
+    }
+});
