@@ -41,9 +41,34 @@ const sortState = {
 
 window.addEventListener('DOMContentLoaded', function (e) {
     console.log("DOMContentLoaded");
+    updateSliderValues();
     document.querySelector("#copyright_date").textContent = (new Date()).getUTCFullYear() + '.';
 });
+slider.addEventListener('input', () => {
+    updateSliderValues();
+});
+input.addEventListener('change', () => {
+    // Limit slider value to its min and Max Value
+    input.value = input.value || input.min;
+    input.value = Math.min(input.value, input.max);
+});
+generateOptions.childNodes.forEach(element => {
+    element.addEventListener('click', async () => {
 
+        sortButton.disabled = true;
+
+        sortBoxesConstants.forEach(c => c.sortWatch.reset());
+
+        for (let i = 0; i < sortBoxes.length; i++) {
+            sortBoxesContainer[i].style.filter = '';
+            await generateBoxNodes(i, element.textContent);
+        }
+
+        globalAdjust();
+
+        sortButton.disabled = false;
+    });
+});
 function inputDropDownEvents(input) {
     const dropIcon = input.nextElementSibling;
     const dropList = dropIcon.nextElementSibling;
@@ -51,6 +76,7 @@ function inputDropDownEvents(input) {
         element.addEventListener('click', () => {
             input.value = element.textContent;
             input.parentElement.click();
+            generateStopButton.click();
         });
     });
     input.parentElement.addEventListener('click', (e) => {
@@ -59,7 +85,28 @@ function inputDropDownEvents(input) {
         dropIcon.classList.toggle('sortbox__select__dropdown--rotate');
     });
 }
-
+function updateSliderValues() {
+    const velocity = animationlimit.velocity;
+    slider.nextElementSibling.textContent = velocity;
+    sortBoxesConstants.forEach(c => {
+        if (//generateStopButton.textContent == buttonState.generateBox &&
+            (velocity == animationlimit.fast || velocity == animationlimit.fastest))
+            c.sortWatch.element.classList.add('sortbox__timer--show');
+        else {
+            c.sortWatch.element.classList.remove('sortbox__timer--show');
+        }
+    });
+    const newWidth = animationlimit.normalized * 100;
+    controls.style.setProperty('--sliderwidth', Math.floor(newWidth) + '%');
+}
+function setTimeFirstSortToComplete(element) {
+    if (!sortState.firstTimerStop) {
+        sortState.firstTimerStop = true;
+        element.textContent += ' ✓';
+        element.style.fontWeight = 'bold';
+        // element.style.setProperty('--sortbox__time_display', 'inherit')
+    }
+}
 async function generateBoxNodes(index, method) {
     const constants = sortBoxesConstants[index];
     const container = sortBoxesContainer[index];
@@ -107,7 +154,7 @@ async function generateBoxNodes(index, method) {
             }
         }
     }
-    
+
     constants.copyTemp = Array(constants.totalBox).fill();
     constants.elemTemp = Array(constants.totalBox).fill();
 
@@ -142,6 +189,30 @@ async function generateBoxNodes(index, method) {
         //await new Promise(r => setTimeout(r, constDelay));
     }
 }
+
+generateStopButton.addEventListener('click', async () => {
+
+    sortBoxesContainer.forEach(c => c.style.filter = 'blur(1px)');
+
+    if (generateStopButton.textContent == buttonState.generateBox) {
+        sortButton.disabled = true;
+
+        generateOptions.classList.add('controls__generate__options--transform');
+    }
+    else {
+        sortState.sliderValue = -1;
+
+        const velocity = animationlimit.velocity;
+        if (animationlimit.fast || velocity == animationlimit.fastest) {
+            sortState.sliderValue = slider.value;
+            slider.value = animationlimit.velocityValue(animationlimit.normal);
+            updateSliderValues();
+        }
+
+        sortState.terminated = true;
+    }
+});
+
 sortBoxes.push(mainsortBox);
 sortBoxesContainer.push(mainsortBox.getElementsByClassName('sortbox__container')[0]);
 sortBoxesNodes.push([]);
@@ -151,6 +222,7 @@ inputDropDownEvents(sortInput);
 const sortTimer = mainsortBox.getElementsByClassName('sortbox__timer')[0];
 sortBoxesConstants.push({
     sortInput: sortInput,
+    sortWatch: new StopWatch(sortBoxesConstants.length, sortTimer, setTimeFirstSortToComplete),
     copyTemp: null,
     elemTemp: null,
     maxNum: 0,
