@@ -160,7 +160,10 @@ async function generateBoxNodes(index, method) {
     const container = sortBoxesContainer[index];
 
     // Print Algorithm Steps
-    /**/
+    printAlgoToBoard(index, '');
+    if (constants.sortInput.value == "Bubble Sort") {
+        printAlgoToBoard(index, algoBubbleSort);
+    }
 
     constants.horiMul = 1;
     constants.verTop = Math.floor(container.clientHeight / 2) - 1;
@@ -261,6 +264,168 @@ generateStopButton.addEventListener('click', async () => {
         sortState.terminated = true;
     }
 });
+
+sortButton.addEventListener('click', () => {
+    globalAdjust();
+
+    generateStopButton.textContent = buttonState.stopSorting;
+
+    sortButton.disabled = true;
+
+    sortState.firstTimerStop = false;
+
+    sortState.terminated = false;
+
+    const allSortMethod = [];
+
+    const velocity = animationlimit.velocity;
+    if (velocity == animationlimit.fast || velocity == animationlimit.fastest) {
+        sortBoxesConstants.forEach(c => c.sortWatch.reset(true));
+    }
+
+    sortBoxes.forEach((_, i) => {
+        if (sortBoxesConstants[i].sortInput.value == "Bubble Sort") {
+            allSortMethod.push(bubbleSort(sortBoxesNumbers[i], i));
+        }
+    });
+
+    Promise.all(allSortMethod)
+        .catch((error) => {
+            if (error.message == sortState.terminateMsg) {
+                console.log(sortState.terminateMsg);
+            }
+            else throw error;
+        }).finally(() => {
+            generateStopButton.textContent = buttonState.generateBox;
+
+            sortBoxesConstants.forEach(c => c.sortWatch.stop());
+
+            // Reset Algorithm Board
+            /**/
+
+            if (sortState.terminated) {
+
+                if (sortState.sliderValue >= 0) {
+                    slider.value = sortState.sliderValue;
+                    updateSliderValues();
+                }
+
+                generateStopButton.click();
+            }
+        });
+
+});
+
+const moveToLine = async (sortBoxIndex, line) => {
+    if (windowState.mediaSize == 'extraSmall')
+        return;
+
+    const aBoard = sortBoxesAlgoBoard[sortBoxIndex];
+    aBoard.algoTracker.style.transform = '';
+
+    const moveToLineConstants = aBoard.moveToLineConstants;
+
+    if (moveToLineConstants.prev) {
+        moveToLineConstants.prev.style.fontWeight = moveToLineConstants.fontWeight;
+        moveToLineConstants.prev.style.transform = moveToLineConstants.transform;
+    }
+    const velocity = animationlimit.velocity;
+    if (velocity == animationlimit.fast || velocity == animationlimit.fastest) {
+        if (!moveToLineConstants.topOnce) {
+            moveToLineConstants.topOnce = true;
+            aBoard.algoTracker.style.top = `${algoTrackerDefaultTop} ${-2})`;
+            aBoard.algoBoard.scrollTop = 0;
+        }
+        return;
+    }
+    moveToLineConstants.topOnce = false;
+
+    const currentLine = aBoard.algoSteps.children[line];
+    if (!currentLine.style)
+        currentLine.style = '';
+
+    moveToLineConstants.prev = currentLine;
+    moveToLineConstants.fontWeight = currentLine.style.fontWeight;
+    currentLine.style.fontWeight = 550;
+    currentLine.style.transform = 'scale(1.025)';
+    aBoard.algoBoard.scrollTo({ top: currentLine.offsetTop, behavior: 'smooth' });
+    // currentLine.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    aBoard.algoTracker.style.top = `${algoTrackerDefaultTop} ${line + 1})`;
+    aBoard.algoTracker.style.transform = 'scale(1.025)';
+
+    await new Promise(r => setTimeout(r, animationlimit.normalizedInversed * 1000));
+
+    if (sortState.terminated) {
+        throw new Error(sortState.terminateMsg);
+    }
+};
+const printAlgoToBoard = (sortBoxIndex, theAlgorithm) => {
+    const aBoard = sortBoxesAlgoBoard[sortBoxIndex];
+    aBoard.algoSteps.textContent = '';
+
+    theAlgorithm.split(/\n/).forEach(line => {
+        if (line.trim().length > 0) {
+            const count = document.createElement("span");
+            count.textContent = aBoard.algoSteps.children.length + 1 + '.';
+            const newLi = document.createElement("p");
+            newLi.textContent = line;
+            let padding = 0;
+            for (let S of line) {
+                if (S == ' ') {
+                    padding += 3;
+                } else break;
+            }
+            newLi.style.paddingLeft = 3 + padding + "px";
+
+            const parent = document.createElement("section");
+            parent.appendChild(count);
+            parent.appendChild(newLi);
+
+            aBoard.algoSteps.appendChild(parent);
+        }
+    });
+    aBoard.algoTracker.style.top = `${algoTrackerDefaultTop} ${0})`;
+};
+const printSortDescription = (sortInformation) => {
+    asideSideinfo.textContent = '';
+    const parent = document.createElement("section");
+    sortInformation.description.split(/\n/).forEach(line => {
+        let newLi;
+        if (line.trim().length > 0) {
+            newLi = document.createElement("p");
+            newLi.textContent = line;
+        } else {
+            newLi = document.createElement("br");
+        }
+        parent.appendChild(newLi);
+    });
+    const table = document.createElement("table");
+    table.innerHTML = `
+    <tbody>
+        <tr>
+            <td><strong>Best-case</strong></td>
+            <td>${sortInformation.complexity.bestCase}</td>
+        </tr>
+            <td><strong>Average-case</strong></td>
+            <td>${sortInformation.complexity.averageCase}</td>
+        </tr>
+        <tr>
+            <td><strong>Worst-case</strong></td>
+            <td>${sortInformation.complexity.worstCase}</td>
+        </tr>
+            <td><strong>Space Complexity</strong></td>
+            <td>${sortInformation.complexity.spaceCase}</td>
+        </tr>
+            <td><strong>Stable</strong></td>
+            <td>${sortInformation.complexity.stable}</td>
+        </tr>
+    </tr>
+    </tbody>
+    `;
+    asideSideinfo.appendChild(parent);
+    asideSideinfo.appendChild(table);
+    asideSideinfo.scrollTop = 0;
+};
 
 sortBoxes.push(mainsortBox);
 sortBoxesContainer.push(mainsortBox.getElementsByClassName('sortbox__container')[0]);
