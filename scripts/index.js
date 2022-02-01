@@ -30,10 +30,10 @@ const buttonState = {
 };
 const sortState = {
     sortSelection: null,
-    terminated: false,
+    terminated: false, // Triggerd to stop sorting
     terminateMsg: 'Sort Terminated',
-    sliderValue: -1,
-    firstTimerStop: false,
+    sliderValue: -1, // Used to reset slider to original value when speed is fast/fastest
+    firstTimerStop: false, // Triggerd to set time to first sorting method to complete
     get canHover() {
         return !window.matchMedia("(hover: none)").matches;
     }
@@ -68,6 +68,54 @@ generateOptions.childNodes.forEach(element => {
 
         sortButton.disabled = false;
     });
+});
+mainCompare.addEventListener('click', () => {
+    mainCompare.classList.toggle('compare--move');
+
+    if (sortBoxes.length < 2) {
+        const element = mainsortBox.cloneNode(true);
+        main.appendChild(element);
+        sortBoxes.push(element);
+        const container = element.getElementsByClassName('sortbox__container')[0];
+        container.textContent = '';
+        sortBoxesContainer.push(container);
+        sortBoxesNodes.push([]);
+        sortBoxesNumbers.push([]);
+        const sortInput = element.getElementsByTagName('Input')[0];
+        inputDropDownEvents(sortInput);
+        const sortTimer = element.getElementsByClassName('sortbox__timer')[0];
+        sortBoxesConstants.push({
+            sortInput: sortInput,
+            sortWatch: new StopWatch(sortBoxesConstants.length, sortTimer, setTimeFirstSortToComplete),
+            copyTemp: null,
+            elemTemp: null,
+            maxNum: 0,
+            animationPlaying: false,
+        });
+        sortBoxesAlgoBoard.push({
+            algoBoard: element.getElementsByClassName('algorithm')[0],
+            algoTitle: element.getElementsByClassName('algorithm__title')[0],
+            algoSteps: element.getElementsByClassName('algorithm__steps')[0],
+            algoTracker: element.getElementsByClassName('algorithm__tracker')[0],
+            moveToLineConstants: {
+                prev: null,
+                fontWeight: null,
+                transform: null,
+                topOnce: false,
+            }
+        });
+    } else {
+        main.removeChild(sortBoxes.pop());
+        sortBoxesContainer.pop();
+        sortBoxesNodes.pop();
+        sortBoxesNumbers.pop();
+        const popConst = sortBoxesConstants.pop();
+        popConst.sortWatch.reset();
+        sortBoxesAlgoBoard.pop();
+    }
+    root.style.setProperty('--main_sortbox_width', 100 / sortBoxes.length + '%');
+
+    generateStopButton.click();
 });
 function inputDropDownEvents(input) {
     const dropIcon = input.nextElementSibling;
@@ -155,6 +203,7 @@ async function generateBoxNodes(index, method) {
         }
     }
 
+    // Temp Array for Merge Sort
     constants.copyTemp = Array(constants.totalBox).fill();
     constants.elemTemp = Array(constants.totalBox).fill();
 
@@ -220,6 +269,7 @@ sortBoxesNumbers.push([]);
 const sortInput = mainsortBox.getElementsByTagName('Input')[0];
 inputDropDownEvents(sortInput);
 const sortTimer = mainsortBox.getElementsByClassName('sortbox__timer')[0];
+// Properties for each sort methods
 sortBoxesConstants.push({
     sortInput: sortInput,
     sortWatch: new StopWatch(sortBoxesConstants.length, sortTimer, setTimeFirstSortToComplete),
