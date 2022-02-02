@@ -23,13 +23,9 @@ const windowState = {
     }
 };
 function globalAdjust() {
-    console.log(windowState.mediaSize);
+   // console.log(windowState.mediaSize);
 
     if (isZooming()) return;
-
-    if (windowState.mediaSize == 'extraSmall' && sortBoxes.length > 1) {
-        mainCompare.click();
-    }
 
     generateOptions.classList.remove('controls__generate__options--transform');
 

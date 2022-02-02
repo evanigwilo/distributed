@@ -38,7 +38,32 @@ const sortState = {
         return !window.matchMedia("(hover: none)").matches;
     }
 };
-
+// Make opacity 0.5 for any disabled element
+const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+        const target = mutation.target;
+        if (target.disabled && !target.classList.contains('opacity-half')) {
+            target.classList.add('opacity-half');
+            if (target.classList.contains('controls__sort')) {
+                sortBoxesConstants.forEach(({ sortInput: { parentElement } }) => {
+                    parentElement.classList.add('opacity-half');
+                    parentElement.style.pointerEvents = 'none';
+                });
+            }
+        } else if (!target.disabled && target.classList.contains('opacity-half')) {
+            target.classList.remove('opacity-half');
+            if (target.classList.contains('controls__sort')) {
+                sortBoxesConstants.forEach(({ sortInput: { parentElement } }) => {
+                    parentElement.classList.remove('opacity-half');
+                    parentElement.style.pointerEvents = '';
+                });
+            }
+        }
+    });
+});
+document.querySelectorAll('input, textarea, button, select, a').forEach(element => {
+    observer.observe(element, { attributes: true, childList: true });
+});
 window.addEventListener('DOMContentLoaded', function (e) {
     console.log("DOMContentLoaded");
     updateSliderValues();
@@ -163,6 +188,11 @@ async function generateBoxNodes(index, method) {
     printAlgoToBoard(index, '');
     if (constants.sortInput.value == "Bubble Sort") {
         printAlgoToBoard(index, algoBubbleSort);
+    } else if (constants.sortInput.value == "Insertion Sort") {
+        printAlgoToBoard(index, algoInsertionSort);
+    }
+    else if (constants.sortInput.value == "Selection Sort") {
+        printAlgoToBoard(index, algoSelectionSort);
     }
 
     constants.horiMul = 1;
@@ -243,6 +273,7 @@ async function generateBoxNodes(index, method) {
 }
 
 generateStopButton.addEventListener('click', async () => {
+    globalAdjust();
 
     sortBoxesContainer.forEach(c => c.style.filter = 'blur(1px)');
 
@@ -287,6 +318,12 @@ sortButton.addEventListener('click', () => {
         if (sortBoxesConstants[i].sortInput.value == "Bubble Sort") {
             allSortMethod.push(bubbleSort(sortBoxesNumbers[i], i));
         }
+        else if (sortBoxesConstants[i].sortInput.value == "Insertion Sort") {
+            allSortMethod.push(insertionSort(sortBoxesNumbers[i], i));
+        }
+        else if (sortBoxesConstants[i].sortInput.value == "Selection Sort") {
+            allSortMethod.push(selectionSort(sortBoxesNumbers[i], i));
+        }
     });
 
     Promise.all(allSortMethod)
@@ -301,13 +338,26 @@ sortButton.addEventListener('click', () => {
             sortBoxesConstants.forEach(c => c.sortWatch.stop());
 
             // Reset Algorithm Board
-            /**/
+            sortBoxesAlgoBoard.forEach(aBoard => {
+                const moveToLineConstants = aBoard.moveToLineConstants;
+
+                if (moveToLineConstants.prev) {
+                    moveToLineConstants.prev.style.fontWeight = moveToLineConstants.fontWeight;
+                    moveToLineConstants.prev.style.transform = moveToLineConstants.transform;
+                }
+                aBoard.algoTracker.style.top = `${algoTrackerDefaultTop} ${-2})`;
+                aBoard.algoBoard.scrollTop = 0;
+            });
 
             if (sortState.terminated) {
 
                 if (sortState.sliderValue >= 0) {
                     slider.value = sortState.sliderValue;
                     updateSliderValues();
+                }
+
+                if (windowState.mediaSize == 'extraSmall' && sortBoxes.length > 1) {
+                    mainCompare.click();
                 }
 
                 generateStopButton.click();
