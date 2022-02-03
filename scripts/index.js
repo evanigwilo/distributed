@@ -194,7 +194,10 @@ async function generateBoxNodes(index, method) {
     else if (constants.sortInput.value == "Selection Sort") {
         printAlgoToBoard(index, algoSelectionSort);
     }
-
+    else if (constants.sortInput.value == "Heap Sort") {
+        printAlgoToBoard(index, algoBuildHeap);
+    }
+    
     constants.horiMul = 1;
     constants.verTop = Math.floor(container.clientHeight / 2) - 1;
     constants.boxWidth = Math.floor(container.clientWidth / Number(input.value));
@@ -323,6 +326,9 @@ sortButton.addEventListener('click', () => {
         }
         else if (sortBoxesConstants[i].sortInput.value == "Selection Sort") {
             allSortMethod.push(selectionSort(sortBoxesNumbers[i], i));
+        }
+        else if (sortBoxesConstants[i].sortInput.value == "Heap Sort") {
+            allSortMethod.push(buildHeap(sortBoxesNumbers[i], i));
         }
     });
 
