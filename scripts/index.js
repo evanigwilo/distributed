@@ -200,6 +200,9 @@ async function generateBoxNodes(index, method) {
     else if (constants.sortInput.value == "Quick Sort") {
         printAlgoToBoard(index, algoQuickSort);
     }
+    else if (constants.sortInput.value == "Merge Sort") {
+        printAlgoToBoard(index, algoMergeSort);
+    }
 
     constants.horiMul = 1;
     constants.verTop = Math.floor(container.clientHeight / 2) - 1;
@@ -335,6 +338,10 @@ sortButton.addEventListener('click', () => {
         }
         else if (sortBoxesConstants[i].sortInput.value == "Quick Sort") {
             allSortMethod.push(quickSort(sortBoxesNumbers[i], 0, sortBoxesNumbers[i].length - 1, i));
+        }
+        else if (sortBoxesConstants[i].sortInput.value == "Merge Sort") {
+            makeCopy(i);
+            allSortMethod.push(mergeSort(sortBoxesNumbers[i], 0, sortBoxesNumbers[i].length - 1, i));
         }
     });
 
