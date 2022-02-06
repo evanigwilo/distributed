@@ -1,3 +1,22 @@
+@media (hover: hover) {
+  aside dl dd:hover {
+    background-color: rgb(var(--mainColor));
+    color: white;
+    padding-left: 20px;
+  }
+
+  main #compare:hover::after {
+    transform: scaleX(1);
+  }
+}
+@media (hover: none) {
+  aside .dl_dd--active {
+    background-color: rgb(var(--mainColor));
+    color: white;
+    padding-left: 20px;
+  }
+}
+
 /* Extra small devices (phones, 599px and down) */
 @media only screen and (max-width: 599px) {
   :root {

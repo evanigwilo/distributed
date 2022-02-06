@@ -142,6 +142,89 @@ mainCompare.addEventListener('click', () => {
 
     generateStopButton.click();
 });
+navButton.addEventListener('click', () => {
+    if (sortState.sortSelection) {
+        sortState.sortSelection.classList.remove('dl_dd--active');
+        sortState.sortSelection.classList.remove('sort-selection');
+        sortState.sortSelection = null;
+        root.style.setProperty('--aside_expandwidth', '0px');
+        root.style.setProperty('--aside_sidetitle_width', '160px');
+    } else {
+        root.style.setProperty('--aside_sidetitle_width', '0px');
+        navButton.classList.toggle('navbar-collapse-expand');
+        if (navButton.classList.contains('navbar-collapse-expand')) {
+            root.style.setProperty('--aside_sidetitle_width', '160px');
+        }
+
+    }
+});
+sidebarTitle.forEach(currentSelection => {
+    currentSelection.addEventListener('click', async (e) => {
+        sortButton.disabled = true;
+        sortState.terminated = true;
+
+        sortBoxesContainer.forEach((_, index) => printAlgoToBoard(index, ''));
+
+        asideSideinfo.classList.add('blur-filter');
+
+        if (sortState.sortSelection) {
+            sortState.sortSelection.classList.remove('dl_dd--active');
+            sortState.sortSelection.classList.remove('sort-selection');
+            root.style.setProperty('--aside_expandwidth', '0px');
+            controls.style.overflowY = '';
+            if (sortState.sortSelection == currentSelection) {
+                sortState.sortSelection = null;
+            } else {
+                !sortState.canHover && currentSelection.classList.add('dl_dd--active');
+                sortState.sortSelection = currentSelection;
+                await new Promise(r => setTimeout(r, 200));
+                showSortDescription(currentSelection);
+            }
+        } else {
+            !sortState.canHover && currentSelection.classList.add('dl_dd--active');
+            sortState.sortSelection = currentSelection;
+            showSortDescription(currentSelection);
+        }
+
+        await new Promise(r => setTimeout(r, 150));
+        asideSideinfo.classList.remove('blur-filter');
+
+        generateStopButton.click();
+
+    });
+});
+function showSortDescription(currentSelection) {
+    currentSelection.classList.add('sort-selection');
+
+    if (windowState.mediaSize == 'extraSmall') {
+        root.style.setProperty('--aside_sidetitle_width', '0px');
+    }
+    let expandwidth = '250px';
+    if ( //windowState.mediaSize == 'extraSmall' ||
+        //windowState.mediaSize == 'landscape' ||
+        windowState.mediaSize != 'large') {
+        expandwidth = main.clientWidth + 'px';
+    }
+    root.style.setProperty('--aside_expandwidth', expandwidth);
+    if (currentSelection.textContent == "Merge Sort") {
+        printSortDescription(infoMergeSort);
+    }
+    else if (currentSelection.textContent == "Quick Sort") {
+        printSortDescription(infoQuickSort);
+    }
+    else if (currentSelection.textContent == "Bubble Sort") {
+        printSortDescription(infoBubbleSort);
+    }
+    else if (currentSelection.textContent == "Insertion Sort") {
+        printSortDescription(infoInsertSort);
+    }
+    else if (currentSelection.textContent == "Heap Sort") {
+        printSortDescription(infoHeapSort);
+    }
+    else if (currentSelection.textContent == "Selection Sort") {
+        printSortDescription(infoSelectionSort);
+    }
+}
 function inputDropDownEvents(input) {
     const dropIcon = input.nextElementSibling;
     const dropList = dropIcon.nextElementSibling;
