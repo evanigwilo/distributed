@@ -607,3 +607,35 @@ sortBoxesAlgoBoard.push({
         topOnce: false,
     }
 });
+
+// iOS detection from: stackoverflow.com/a/9039885 with explanation about MSStream
+if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    input.setAttribute('pattern', '\\d*');
+}
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('orientationchange', function () { location.reload(); }, false);
+}
+function detectMobile() {
+    const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+    ];
+
+    return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+    });
+}
+function calculateScrollbarWidth(element) {
+    if (!element) {
+        // Return the body scrollbar width, when no element was specified.
+        return window.innerWidth - document.body.clientWidth;
+    } else {
+        // When an element is specified, return its specific scrollbar width.
+        return element.offsetWidth - element.clientWidth;
+    }
+}

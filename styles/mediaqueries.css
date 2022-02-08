@@ -1,3 +1,35 @@
+/* Landscape mobile Orientation */
+@media only screen and (hover: none) and (max-height: 575.98px) and (orientation: landscape){
+  :root {
+    --mediasize: landscape !important;
+  }
+  body {
+    font-size: 14px !important;
+  }
+  footer .contact,
+  .reference {
+    flex-direction: row !important;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  footer .contact > section {
+    width: unset;
+  }
+  aside #sidetitle {
+    overflow-y: scroll;
+  }
+  header #navbar-collapse {
+    display: none;
+  }
+  header {
+    margin-bottom: 10px;
+  }
+  header .logo > img {
+    width: 25px;
+    height: 25px;
+  }
+}
+
 @media (hover: hover) {
   aside dl dd:hover {
     background-color: rgb(var(--mainColor));
