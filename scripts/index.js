@@ -67,7 +67,7 @@ document.querySelectorAll('input, textarea, button, select, a').forEach(element 
 window.addEventListener('DOMContentLoaded', function (e) {
     console.log("DOMContentLoaded");
     updateSliderValues();
-    document.querySelector("#copyright_date").textContent = (new Date()).getUTCFullYear() + '.';
+    document.querySelector("#copyright_date").textContent = "2022.";//(new Date()).getUTCFullYear() + '.';
 });
 slider.addEventListener('input', () => {
     updateSliderValues();
@@ -433,7 +433,7 @@ sortButton.addEventListener('click', () => {
             if (error.message == sortState.terminateMsg) {
                 console.log(sortState.terminateMsg);
             }
-            else throw error;
+            // else throw error;
         }).finally(() => {
             generateStopButton.textContent = buttonState.generateBox;
 
